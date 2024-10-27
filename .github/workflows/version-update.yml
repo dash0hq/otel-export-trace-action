@@ -8,6 +8,7 @@ jobs:
   actions-tagger:
     runs-on: windows-latest
     steps:
+      # Keep your action versions up-to-date by automatically promoting a major tag (and optionally, a latest tag) each time a release is created.
       - uses: Actions-R-Us/actions-tagger@latest
         with:
           publish_latest_tag: true

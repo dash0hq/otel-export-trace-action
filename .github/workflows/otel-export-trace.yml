@@ -15,7 +15,7 @@ jobs:
       - name: export trace
         uses: ./
         with:
-          otlpEndpoint: grpc://api.honeycomb.io:443/
-          otlpHeaders: ${{ secrets.DELIVERY_OTLP_HEADERS }}
+          otlpEndpoint: ${{ secrets.OTLP_ENDPOINT }}
+          otlpHeaders: ${{ secrets.OTLP_HEADERS }}
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           runId: ${{ github.event.workflow_run.id }}

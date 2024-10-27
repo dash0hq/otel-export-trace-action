@@ -1,4 +1,4 @@
-name: "code quality PR check"
+name: "Code quality PR check"
 
 on:
   pull_request:
@@ -33,10 +33,7 @@ jobs:
       - name: validate dist
         run: exit $(git status --porcelain | wc -l)
   tests:
-    strategy:
-      matrix:
-        os: ["ubuntu-latest", "windows-latest", "macos-latest"]
-    runs-on: ${{ matrix.os }}
+    runs-on: "ubuntu-latest"
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2

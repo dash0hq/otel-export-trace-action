@@ -73,6 +73,11 @@ export async function traceWorkflowRunJobs({
       `${workflowRunJobs.workflowRun.workflow_id}`,
     {
       attributes: {
+        // OpenTelemetry semantic convention CICD Pipeline Attributes
+        // https://opentelemetry.io/docs/specs/semconv/attributes-registry/cicd/
+        "cicd.pipeline.name": workflowRunJobs.workflowRun.name || undefined,
+        "cicd.pipeline.run.id": workflowRunJobs.workflowRun.id,
+
         "github.workflow_id": workflowRunJobs.workflowRun.workflow_id,
         "github.run_id": workflowRunJobs.workflowRun.id,
         "github.run_number": workflowRunJobs.workflowRun.run_number,
@@ -183,10 +188,26 @@ async function traceWorkflowRunJob({
   const ctx = trace.setSpan(parentContext, parentSpan);
   const startTime = new Date(job.started_at);
   const completedTime = new Date(job.completed_at);
+
+  // taskType can be either "build", "test", or "deploy" according to the OpenTelemetry semantic convention
+  let taskType = "deploy";
+  if (job.name.toLowerCase().includes("build")) {
+      taskType = "build";
+  } else if (job.name.toLowerCase().includes("Test")) {
+      taskType = "test";
+  }
+
   const span = tracer.startSpan(
     job.name,
     {
       attributes: {
+        // OpenTelemetry semantic convention CICD Pipeline Attributes
+        // https://opentelemetry.io/docs/specs/semconv/attributes-registry/cicd/
+        "cicd.pipeline.task.name": job.name,
+        "cicd.pipeline.task.run.id": job.id,
+        "cicd.pipeline.task.run.url.full": job.html_url,
+        "cicd.pipeline.task.type": taskType,
+
         "github.job.id": job.id,
         "github.job.name": job.name,
         "github.job.run_id": job.run_id,
