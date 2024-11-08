@@ -193,7 +193,7 @@ async function traceWorkflowRunJob({
   let taskType = "deploy";
   if (job.name.toLowerCase().includes("build")) {
       taskType = "build";
-  } else if (job.name.toLowerCase().includes("Test")) {
+  } else if (job.name.toLowerCase().includes("test")) {
       taskType = "test";
   }
 
